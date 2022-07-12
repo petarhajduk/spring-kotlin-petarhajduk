@@ -108,6 +108,7 @@ class CarCheckUpNotFoundException(id: Long): RuntimeException("Car check-up ID $
 class InMemoryCarCheckUpRepository : CarCheckUpRepository{
 
     private val carCheckUpMap = mutableMapOf<Long, CarCheckUp>()
+    //neki komentar
 
     override fun insert(performedAt: LocalDateTime, car: Car): Long {
         val id = ((carCheckUpMap.keys.maxOrNull() ?: 0) + 1).toLong()
