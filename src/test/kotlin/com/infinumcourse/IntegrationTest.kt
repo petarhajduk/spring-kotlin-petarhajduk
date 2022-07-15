@@ -17,4 +17,7 @@ class IntegrationTest @Autowired constructor( private var applicationContext: Ap
     fun prviIntegracijski(){
         assertThat(carCheckUpService.insert(Car("nissan", "model", "mankwec2b2h93b0"))).isNotNull.isEqualTo(1)
     }
+
+
+    
 }
