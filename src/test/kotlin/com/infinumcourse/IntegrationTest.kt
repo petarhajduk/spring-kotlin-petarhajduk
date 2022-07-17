@@ -19,5 +19,5 @@ class IntegrationTest @Autowired constructor( private var applicationContext: Ap
     }
 
 
-    
+
 }
