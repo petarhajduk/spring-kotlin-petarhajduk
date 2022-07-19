@@ -6,13 +6,12 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
-import java.time.Year
 import java.util.*
 
 class Car (val manufacturer: String,
            val carmodel: String,
            val vin: String,
-           val id: Long, val addingDate: LocalDate, val productionYear: Year){
+           val id: Long, val addingDate: LocalDate, val productionYear: Long){
     val checkUps = LinkedList<CarCheckUp>()
 }
 
@@ -23,8 +22,8 @@ class CarCheckUp (val carid: Long,
                   val id: Long, val worker: String, val price: Long)
 
 interface CarCheckUpRepository{
-    fun insert(manufacturer: String, carmodel: String, vin: String, productionYear: Year): Car
-    fun insert(carid: Long, checkUpDateTime: LocalDateTime, worker: String, price: Long): CarCheckUp
+    fun insertCar(manufacturer: String, carmodel: String, vin: String, productionYear: Long): Car
+    fun insertCheckUp(carid: Long, checkUpDateTime: LocalDateTime, worker: String, price: Long): CarCheckUp
     fun getCarInfo(id: Long): CarInfo
     fun findById(id: Long): CarCheckUp
     fun deleteById(id: Long): CarCheckUp
@@ -48,7 +47,12 @@ class InMemoryCarAndCarCheckUpRepository() : CarCheckUpRepository{
 //    }
 
     init {
-        carsMap[0] = Car("Fiat", "Brava", "U9U9BC9UCHTHEO4", 0, LocalDate.now().minusMonths(5), Year.of(2008))
+        carsMap[0] = Car("Fiat", "Brava", "U9U9BC9UCHTHEO4", 0, LocalDate.now().minusMonths(5), 2002)
+        carsMap[1] = Car("Mazda", "6", "N83B89G74BDJC9U", 1, LocalDate.now().minusMonths(2), 2008)
+
+        carCheckUpMap[0] = CarCheckUp(0, LocalDateTime.now().minusYears(1).minusMonths(3), 0, "Siniša", 300)
+        carCheckUpMap[0] = CarCheckUp(0, LocalDateTime.now().minusMonths(3), 1, "Siniša", 500)
+        carCheckUpMap[0] = CarCheckUp(1, LocalDateTime.now().minusYears(1).minusMonths(5), 2, "Siniša", 300)
     }
 
     override fun getCheckUpsByManufacturer(): Map<String, Long> {
@@ -73,7 +77,7 @@ class InMemoryCarAndCarCheckUpRepository() : CarCheckUpRepository{
     }
 
     override fun getCarInfo(id: Long): CarInfo {
-        if (carsMap.containsKey(id)) {
+        if (!carsMap.containsKey(id)) {
             throw CarNotFoundException(id)
         }
 
@@ -97,7 +101,7 @@ class InMemoryCarAndCarCheckUpRepository() : CarCheckUpRepository{
         return carsMap
     }
 
-    override fun insert(manufacturer: String, carmodel: String, vin: String, productionYear: Year): Car {
+    override fun insertCar(manufacturer: String, carmodel: String, vin: String, productionYear: Long): Car {
         val id = ((carsMap.keys.maxOrNull() ?: 0) + 1)
         val car = Car(manufacturer,
             carmodel,
@@ -107,7 +111,7 @@ class InMemoryCarAndCarCheckUpRepository() : CarCheckUpRepository{
         return car
     }
 
-    override fun insert(carid: Long,
+    override fun insertCheckUp(carid: Long,
                         checkUpDateTime: LocalDateTime,
                         worker: String, price: Long): CarCheckUp {
         val id = ((carCheckUpMap.keys.maxOrNull() ?: 0) + 1)

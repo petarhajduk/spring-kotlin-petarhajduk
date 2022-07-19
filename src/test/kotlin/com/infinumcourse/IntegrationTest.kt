@@ -8,14 +8,14 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [ApplicationConfiguration::class])
+@ContextConfiguration(classes = [SpringBootMvcApplication::class])
 class IntegrationTest @Autowired constructor( private var applicationContext: ApplicationContext,
                                               private val carCheckUpService: CarCheckUpService) {
 
 
     @org.junit.jupiter.api.Test
     fun prviIntegracijski(){
-        assertThat(carCheckUpService.insert(Car("nissan", "model", "mankwec2b2h93b0"))).isNotNull.isEqualTo(1)
+        assertThat(carCheckUpService.addCar("Porsche", "Panamera", "JCN94HRV949BC9", 2018)).isNotNull.isEqualTo(1)
     }
 
 
