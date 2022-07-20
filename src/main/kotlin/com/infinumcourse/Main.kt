@@ -8,18 +8,28 @@ import java.time.LocalDateTime
 import java.time.Period
 import java.util.*
 
-class Car (val manufacturer: String,
+data class Car (val manufacturer: String,
            val carmodel: String,
            val vin: String,
            val id: Long, val addingDate: LocalDate, val productionYear: Long){
     val checkUps = LinkedList<CarCheckUp>()
 }
 
+class CarAdder (val manufacturer: String,
+                val carmodel: String, val vin: String, val productionYear: Long)
+
 class CarInfo(val car: Car, val checkUps: LinkedList<CarCheckUp>, checkUpNeeded: Boolean)
 
 class CarCheckUp (val carid: Long,
                   val checkUpDateTime: LocalDateTime,
                   val id: Long, val worker: String, val price: Long)
+
+class CarCheckUpAdder (
+    val carid: Long,
+    val checkUpDateTime: LocalDateTime,
+    val worker: String,
+    val price: Long
+        )
 
 interface CarCheckUpRepository{
     fun insertCar(manufacturer: String, carmodel: String, vin: String, productionYear: Long): Car

@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @Controller
 class CarCheckUpController (private val carCheckUpService: CarCheckUpService) {
@@ -17,15 +16,15 @@ class CarCheckUpController (private val carCheckUpService: CarCheckUpService) {
 
     @PostMapping("/add-car")
     @ResponseBody
-    fun addCar(@RequestBody manufacturer: String, carmodel: String, vin: String, productionYear: Long): ResponseEntity<Car> {
-        val newCar = carCheckUpService.addCar(manufacturer, carmodel, vin, productionYear)
+    fun addCar(@RequestBody carAdder: CarAdder): ResponseEntity<Car> {
+        val newCar = carCheckUpService.addCar(carAdder.manufacturer, carAdder.carmodel, carAdder.vin, carAdder.productionYear)
         return ResponseEntity(newCar, HttpStatus.OK)
     }
 
     @PostMapping("/add-check-up")
     @ResponseBody
-    fun addCheckUp(@RequestBody carid: Long, checkUpDateTime: LocalDateTime, worker: String, price: Long): ResponseEntity<CarCheckUp>{
-        val newCheckUp = carCheckUpService.addCheckUp(carid, checkUpDateTime, worker, price)
+    fun addCheckUp(@RequestBody carCheckUpAdder: CarCheckUpAdder): ResponseEntity<CarCheckUp>{
+        val newCheckUp = carCheckUpService.addCheckUp(carCheckUpAdder.carid, carCheckUpAdder.checkUpDateTime, carCheckUpAdder.worker, carCheckUpAdder.price)
         return ResponseEntity(newCheckUp, HttpStatus.OK)
     }
 
