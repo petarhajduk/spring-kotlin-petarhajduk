@@ -1,6 +1,6 @@
 version: "3"
 
-# docker run --rm --name courses-database -v courses-data:/var/lib/postgresql/data -p 5432:5432
+# docker run --rm --name courses-database -v courses-data:/var/lib/postgresql/data -p 5433:5432
 # -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=courses-db -d postgres:13-alpine
 services:
   courses-database:
