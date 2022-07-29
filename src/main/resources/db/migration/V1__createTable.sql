@@ -1,6 +1,12 @@
-create table cars (
+create table manufacturerandmodels (
+    id uuid primary key,
     manufacturer text,
-    carmodel text,
+    model text
+);
+
+create table cars (
+    manufacturerandmodel uuid not null
+        constraint manufacturerandmodel_fk references manufacturerandmodels(id),
     vin text,
     id uuid primary key,
     addingdate date,
@@ -15,15 +21,15 @@ create table checkups (
     price int
 );
 
-Insert into cars (manufacturer, carmodel, vin, id, addingdate, productionyear)
-values ('Fiat', 'Brava', 'U9U9BC9UCHTHEO4', gen_random_uuid(), '2020-01-01', 2002);
-
-Insert into cars (manufacturer, carmodel, vin, id, addingdate, productionyear)
-values ('Mazda', '6', 'N83B89G74BDJC9U', gen_random_uuid(), '2020-07-05', 2008);
-
-insert into checkups (car, checkupdate, id, worker, price)
-values ((select id from cars where vin = 'U9U9BC9UCHTHEO4'), '2021-04-21', gen_random_uuid(), 'Siniša', 300);
-insert into checkups (car, checkupdate, id, worker, price)
-values ((select id from cars where vin = 'U9U9BC9UCHTHEO4'), '2020-04-21', gen_random_uuid(), 'Siniša', 300);
-insert into checkups (car, checkupdate, id, worker, price)
-values ((select id from cars where vin = 'N83B89G74BDJC9U'), '2022-04-21', gen_random_uuid(), 'Siniša', 300);
+-- Insert into cars (manufacturer, carmodel, vin, id, addingdate, productionyear)
+-- values ('Fiat', 'Brava', 'U9U9BC9UCHTHEO4', gen_random_uuid(), '2020-01-01', 2002);
+--
+-- Insert into cars (manufacturer, carmodel, vin, id, addingdate, productionyear)
+-- values ('Mazda', '6', 'N83B89G74BDJC9U', gen_random_uuid(), '2020-07-05', 2008);
+--
+-- insert into checkups (car, checkupdate, id, worker, price)
+-- values ((select id from cars where vin = 'U9U9BC9UCHTHEO4'), '2021-04-21', gen_random_uuid(), 'Siniša', 300);
+-- insert into checkups (car, checkupdate, id, worker, price)
+-- values ((select id from cars where vin = 'U9U9BC9UCHTHEO4'), '2020-04-21', gen_random_uuid(), 'Siniša', 300);
+-- insert into checkups (car, checkupdate, id, worker, price)
+-- values ((select id from cars where vin = 'N83B89G74BDJC9U'), '2022-04-21', gen_random_uuid(), 'Siniša', 300);

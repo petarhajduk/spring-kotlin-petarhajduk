@@ -1,6 +1,7 @@
 package com.infinumcourse.cars.controllers
 
 import com.infinumcourse.cars.entities.Car
+import com.infinumcourse.cars.entities.CarManufacturerAndModel
 import java.time.LocalDate
 
 class CarAdder(
@@ -11,8 +12,7 @@ class CarAdder(
     val productionYear: Long
     ){
     fun toCar() = Car(
-        manufacturer = manufacturer,
-        carmodel = carmodel,
+        manufacturerAndModel = CarManufacturerAndModel(manufacturer = manufacturer, model = carmodel),
         vin = vin,
         addingDate = addingDate,
         productionYear = productionYear)

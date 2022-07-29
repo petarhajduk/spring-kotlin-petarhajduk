@@ -6,6 +6,8 @@ import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
@@ -14,9 +16,9 @@ data class Car (
     @Id
     val id: UUID = UUID.randomUUID(),
 
-    val manufacturer: String,
-
-    val carmodel: String,
+    @ManyToOne
+    @JoinColumn(name = "manufacturerandmodel")
+    val manufacturerAndModel: CarManufacturerAndModel,
 
     val vin: String,
 

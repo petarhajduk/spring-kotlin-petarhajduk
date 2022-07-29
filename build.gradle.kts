@@ -26,15 +26,20 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.assertj:assertj-core:3.23.1")
     testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
 
     implementation("org.springframework.boot:spring-boot-starter-jdbc") //Adds db functionality
     implementation("org.springframework.boot:spring-boot-starter-web") //Adds web functionality
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") //Adds Spring Boot test
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")

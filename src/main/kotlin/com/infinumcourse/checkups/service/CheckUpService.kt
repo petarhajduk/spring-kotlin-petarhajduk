@@ -27,7 +27,7 @@ class CheckUpService(
         val cars = carRepository.findAll()
 
         cars.forEach{//Iterating through every car in the database to add every manufacturer in the map
-            if (!map.containsKey(it.manufacturer)) map.put(it.manufacturer, 0)
+            if (!map.containsKey(it.manufacturerAndModel.manufacturer)) map.put(it.manufacturerAndModel.manufacturer, 0)
         }
 
         var manufacturer: String?
@@ -35,8 +35,8 @@ class CheckUpService(
 
         val checkups = checkUpRepository.findAll()
         checkups.forEach{//after each iteration I will increment the value in the map depending on who's car's check up am I currently at
-            temp = map[it.car.manufacturer] ?: throw RuntimeException("The map broke")
-            map[it.car.manufacturer] = temp+1
+            temp = map[it.car.manufacturerAndModel.manufacturer] ?: throw RuntimeException("The map broke")
+            map[it.car.manufacturerAndModel.manufacturer] = temp+1
         }
 
         return map

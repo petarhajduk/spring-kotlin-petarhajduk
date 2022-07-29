@@ -1,11 +1,13 @@
 package com.infinumcourse.cars.repository
 
 import com.infinumcourse.cars.entities.Car
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.Repository
 import java.util.*
 
+@Qualifier("car")
 interface CarRepository : Repository<Car, UUID>{
 
     fun save(car: Car): Car
