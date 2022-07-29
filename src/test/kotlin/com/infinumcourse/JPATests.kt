@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -24,10 +23,8 @@ class JPATests @Autowired constructor(
     @BeforeEach
     fun setup(){
 
-        carRepository.deleteAll()
         checkUpRepository.deleteAll()
-
-        val formater = DateTimeFormatter.ofPattern("YYYY-MM-DD")
+        carRepository.deleteAll()
 
         val fiat = Car(manufacturer = "Fiat", carmodel = "Brava", vin =  "U9U9BC9UCHTHEO4", addingDate = LocalDate.parse("2020-07-07"), productionYear = 2001)
         val mazda = Car(manufacturer = "Mazda", carmodel = "6", vin = "N83B89G74BDJC9U", addingDate = LocalDate.parse("2018-04-04"), productionYear = 2008)
@@ -66,10 +63,10 @@ class JPATests @Autowired constructor(
     @Test
     fun findByProductionYearIfExists(){
         val carsFrom2001 = carRepository.findByProductionYear(2001)
-        Assertions.assertThat(carsFrom2001).isEqualTo(1)
+        Assertions.assertThat(carsFrom2001.size).isEqualTo(1)
 
         val carsFrom2002 = carRepository.findByProductionYear(2002)
-        Assertions.assertThat(carsFrom2002).isNull()
+        Assertions.assertThat(carsFrom2002.size).isEqualTo(0)
     }
 
     @Test

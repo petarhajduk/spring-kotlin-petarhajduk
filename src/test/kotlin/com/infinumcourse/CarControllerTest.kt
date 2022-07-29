@@ -55,4 +55,14 @@ class CarControllerTest @Autowired constructor(
     fun getCarInfoTest(){
         mockMvc.get("/get-car-info/4b9cde0f-eb26-4622-8a4a-c96ffac2751d").andExpect { status { is2xxSuccessful() } }
     }
+
+    @Test
+    fun getAllCarsPaged(){
+        mockMvc.get("/get-all-cars-paged?size=2").andExpect { status { is2xxSuccessful() } }
+    }
+
+    @Test
+    fun getAllCheckUpsPaged(){
+        mockMvc.get("/get-all-checkups-paged?id=bb2f22ca-fa81-4d35-a7cb-a5ebd0ec928c").andExpect { status { is2xxSuccessful() } }
+    }
 }

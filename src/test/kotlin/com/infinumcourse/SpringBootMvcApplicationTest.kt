@@ -4,6 +4,7 @@ import com.infinumcourse.cars.service.CarService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Pageable
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.util.*
@@ -35,6 +36,16 @@ class SpringBootMvcApplicationTest {
             .andExpect {
                 status { is2xxSuccessful() }
                 content { allCars }
+            }
+    }
+
+    @org.junit.jupiter.api.Test
+    fun testGetAllCarsPaged(){
+        val carsPaged = carService.getAllCarsPaged(Pageable.ofSize(2))
+        mockMvc.get("/get-all-cars-paged")
+            .andExpect {
+                status { is2xxSuccessful() }
+                content { carsPaged }
             }
     }
 }

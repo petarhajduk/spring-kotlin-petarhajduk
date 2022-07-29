@@ -6,7 +6,7 @@ services:
   courses-database:
     image: "postgres:13-alpine"
     ports:
-      - "5433:5432"
+      - "5434:5432"
     environment:
       - "POSTGRES_USER=admin"
       - "POSTGRES_PASSWORD=12345678"
