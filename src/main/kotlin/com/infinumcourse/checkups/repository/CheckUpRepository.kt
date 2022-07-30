@@ -24,7 +24,5 @@ interface CheckUpRepository: Repository<CarCheckUp, UUID> {
 
     fun findByCar_Id(id: UUID, pageable: Pageable): Page<CarCheckUp>
 
-//    fun findByCar_Manufacturer(manufacturer: String): List<CarCheckUp>
-
     fun findByWorkerAndPrice(manufacturer: String, price: Long): List<CarCheckUp>
 }

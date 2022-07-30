@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.Repository
 import java.util.*
 
-@Qualifier("car")
 interface CarRepository : Repository<Car, UUID>{
 
     fun save(car: Car): Car

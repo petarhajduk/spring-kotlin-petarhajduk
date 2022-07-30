@@ -1,11 +1,13 @@
 create table manufacturerandmodels (
-    id uuid primary key,
+    id bigint primary key,
     manufacturer text,
     model text
 );
 
+create sequence manufacturersandmodels_seq;
+
 create table cars (
-    manufacturerandmodel uuid not null
+    manufacturerandmodel bigint not null
         constraint manufacturerandmodel_fk references manufacturerandmodels(id),
     vin text,
     id uuid primary key,

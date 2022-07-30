@@ -9,7 +9,7 @@ import javax.persistence.*
 @Table(name = "checkups")
 class CarCheckUp (
 
-    @ManyToOne
+    @ManyToOne//(cascade = [CascadeType.ALL])
     @JoinColumn(name = "car")
     val car: Car,
 

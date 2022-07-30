@@ -1,5 +1,6 @@
 package com.infinumcourse.cars.controllers
 
+import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.cars.entities.Car
 import com.infinumcourse.cars.entities.CarInfo
 import com.infinumcourse.cars.service.CarService
@@ -40,4 +41,9 @@ class CarController (private val carService: CarService) {
         return carService.getAllCarsPaged(pageable)
     }
 
+    @GetMapping("/get-all-manufacturers-and-models")
+    @ResponseBody
+    fun getAllManufacturersAndModels(): Iterable<ManufacturerAndModel> {
+        return carService.getAllManufacturersAndModels()
+    }
 }

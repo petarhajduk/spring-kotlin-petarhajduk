@@ -1,7 +1,7 @@
 package com.infinumcourse.APIInfo.service
 
 import com.infinumcourse.APIInfo.entities.CarResponse
-import com.infinumcourse.APIInfo.entities.FormatForDataBase
+import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.APIInfo.entities.ManufacturerAndModels
 import com.infinumcourse.APIInfo.repository.CarResponseRepository
 import org.slf4j.LoggerFactory
@@ -22,23 +22,39 @@ class RestTemplateCarService(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
+    //@CacheEvict("apiFetch")
     fun getManufacturersAndModels(){
         logger.info("fetching from URL...")
-        val JSONObject: Array<ManufacturerAndModels> = restTemplate.getForObject<CarResponse>("$baseUrl").cars
 
-        val manufacturers: List<String> = JSONObject.map { cars -> cars.manufacturer } //combining all manufacturers in one list
+        val JSONObject: Array<ManufacturerAndModels> =
+            restTemplate.getForObject<CarResponse>("$baseUrl").cars
+
         val models = mutableListOf<String>()
         JSONObject.forEach { models.addAll(it.models)} //combining all models in one list
 
-        val dbInput = mutableListOf<FormatForDataBase>()
 
-        for (ma in manufacturers){ //basically creating a list with pairs (manufacturer, model) because that eay I would be able to store them in the database
-            for (mo in models){    //manufacturers will repeat, yes
-                dbInput.add(FormatForDataBase(ma, mo))
+        if (!carResponseRepository.findAll().any()){
+            val dbInput = mutableListOf<ManufacturerAndModel>()
+
+            for (manu in JSONObject){ //basically creating a list with pairs (manufacturer, model) because that way I would be able to store them in the database
+                for (model in manu.models){
+                    dbInput.add(ManufacturerAndModel(manufacturer = manu.manufacturer, model = model))
+                }
+            }
+
+            carResponseRepository.saveAll(dbInput)
+            return
+        } else {
+            val numOfRows = carResponseRepository.count()
+            if (numOfRows == models.size.toLong()) return
+
+            for (o in JSONObject){
+                for (model in o.models){
+                    if (!carResponseRepository.existsByManufacturerAndModel(o.manufacturer, model)){
+                        carResponseRepository.save(ManufacturerAndModel(manufacturer = o.manufacturer, model = model))
+                    }
+                }
             }
         }
-
-        carResponseRepository.saveAll(dbInput)
     }
-
 }

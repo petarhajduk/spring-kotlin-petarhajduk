@@ -1,5 +1,6 @@
 package com.infinumcourse.cars.service
 
+import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.APIInfo.repository.CarResponseRepository
 import com.infinumcourse.APIInfo.service.RestTemplateCarService
 import com.infinumcourse.cars.controllers.CarAdder
@@ -22,15 +23,18 @@ class CarService(
     val rtCarService: RestTemplateCarService
     ){
 
+    //@Cacheable("car_added")
     fun addCar(carAdder: CarAdder): Car {
         val data = carResponseRepository.findAll()
         val manufacturers: List<String> = data.map { data -> data.manufacturer }
         val models: List<String> = data.map { data -> data.model }
 
-        if (!manufacturers.contains(carAdder.manufacturer)) throw IllegalArgumentException("Manufacturer (${carAdder.manufacturer}) does not exist")
-        if (!models.contains(carAdder.carmodel)) throw IllegalArgumentException("Car model (${carAdder.carmodel}) does not exist")
+        if (!manufacturers.contains(carAdder.manufacturerAndModel.manufacturer)) throw IllegalArgumentException("Manufacturer (${carAdder.manufacturerAndModel.manufacturer}) does not exist")
+        if (!models.contains(carAdder.manufacturerAndModel.model)) throw IllegalArgumentException("Car model (${carAdder.manufacturerAndModel.model}) does not exist")
 
-        return carRepository.save(carAdder.toCar())
+        val car = Car(manufacturerAndModel = carResponseRepository.findByManufacturerAndModel(carAdder.manufacturerAndModel.manufacturer, carAdder.manufacturerAndModel.model), vin = carAdder.vin, addingDate = carAdder.addingDate, productionYear = carAdder.productionYear)
+
+        return carRepository.save(car)
     }
 
 
@@ -57,6 +61,10 @@ class CarService(
 
     fun getAllCarsPaged(pageable: Pageable): Page<Car> {
         return carRepository.findAll(pageable)
+    }
+
+    fun getAllManufacturersAndModels(): Iterable<ManufacturerAndModel> {
+        return carResponseRepository.findAll()
     }
 }
 

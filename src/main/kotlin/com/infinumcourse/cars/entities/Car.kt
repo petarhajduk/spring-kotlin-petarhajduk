@@ -1,14 +1,10 @@
 package com.infinumcourse.cars.entities
 
 
+import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import java.time.LocalDate
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "cars")
@@ -16,9 +12,9 @@ data class Car (
     @Id
     val id: UUID = UUID.randomUUID(),
 
-    @ManyToOne
+    @ManyToOne//(cascade = [CascadeType.ALL])
     @JoinColumn(name = "manufacturerandmodel")
-    val manufacturerAndModel: CarManufacturerAndModel,
+    val manufacturerAndModel: ManufacturerAndModel,
 
     val vin: String,
 

@@ -1,7 +1,8 @@
 package com.infinumcourse
 
+import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
+import com.infinumcourse.APIInfo.repository.CarResponseRepository
 import com.infinumcourse.cars.entities.Car
-import com.infinumcourse.cars.entities.CarManufacturerAndModel
 import com.infinumcourse.cars.repository.CarRepository
 import com.infinumcourse.checkups.entities.CarCheckUp
 import com.infinumcourse.checkups.repository.CheckUpRepository
@@ -18,7 +19,8 @@ import java.time.LocalDate
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class JPATests @Autowired constructor(
     val carRepository: CarRepository,
-    val checkUpRepository: CheckUpRepository
+    val checkUpRepository: CheckUpRepository,
+    val carResponseRepository: CarResponseRepository
 ){
 
     @BeforeEach
@@ -26,10 +28,17 @@ class JPATests @Autowired constructor(
 
         checkUpRepository.deleteAll()
         carRepository.deleteAll()
+        carResponseRepository.deleteAll()
 
-        val fiat = Car(manufacturerAndModel = CarManufacturerAndModel(manufacturer = "Fiat", model = "Brava"), vin =  "U9U9BC9UCHTHEO4", addingDate = LocalDate.parse("2020-07-07"), productionYear = 2001)
-        val mazda = Car(manufacturerAndModel = CarManufacturerAndModel(manufacturer = "Mazda", model = "6"), vin = "N83B89G74BDJC9U", addingDate = LocalDate.parse("2018-04-04"), productionYear = 2008)
-        val porsche = Car(manufacturerAndModel = CarManufacturerAndModel(manufacturer = "Porsche", model = "Panamera"), vin = "HDOW0C37F7E73BM", addingDate = LocalDate.parse("2021-10-10"), productionYear = 2018)
+        val fiatBrava = ManufacturerAndModel(manufacturer = "Fiat", model = "Brava")
+        val mazda6 = ManufacturerAndModel(manufacturer = "Mazda", model = "6")
+        val porschePanamera = ManufacturerAndModel(manufacturer = "Porsche", model = "Panamera")
+
+        carResponseRepository.saveAll(listOf(fiatBrava, mazda6, porschePanamera))
+
+        val fiat = Car(manufacturerAndModel = fiatBrava, vin =  "U9U9BC9UCHTHEO4", addingDate = LocalDate.parse("2020-07-07"), productionYear = 2001)
+        val mazda = Car(manufacturerAndModel = mazda6, vin = "N83B89G74BDJC9U", addingDate = LocalDate.parse("2018-04-04"), productionYear = 2008)
+        val porsche = Car(manufacturerAndModel = porschePanamera, vin = "HDOW0C37F7E73BM", addingDate = LocalDate.parse("2021-10-10"), productionYear = 2018)
 
         carRepository.saveAll(listOf(fiat, mazda, porsche))
 
@@ -63,18 +72,14 @@ class JPATests @Autowired constructor(
 
     @Test
     fun findByProductionYearIfExists(){
-        val carsFrom2001 = carRepository.findByProductionYear(2001)
+        val year2001: Long = 2001
+        val carsFrom2001 = carRepository.findByProductionYear(year2001)
         Assertions.assertThat(carsFrom2001.size).isEqualTo(1)
 
-        val carsFrom2002 = carRepository.findByProductionYear(2002)
+        val year2002: Long = 2002
+        val carsFrom2002 = carRepository.findByProductionYear(year2002)
         Assertions.assertThat(carsFrom2002.size).isEqualTo(0)
     }
-
-//    @Test
-//    fun findCheckUpsByManufacturer(){
-//        val checkUpsOfManufacturer = checkUpRepository.findByCar_Manufacturer("Mazda")
-//        Assertions.assertThat(checkUpsOfManufacturer.size).isEqualTo(2)
-//    }
 
     @Test
     fun findCheckUpsByWorkerAndPrice(){

@@ -6,7 +6,7 @@ import java.util.*
 
 data class CarDTO(
     val id: UUID,
-    val manufacturerAndModelId: UUID,
+    val manufacturerAndModelId: Long,
     val vin: String,
     val addingDate: LocalDate,
     val productionYear: Long
