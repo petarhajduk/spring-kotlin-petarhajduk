@@ -14,8 +14,13 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 
+
+@SpringBootTest
+@AutoConfigureMockMvc
 class Test {
     val carRepository: CarRepository = mockk<CarRepository>()
     val checkUpRepository: CheckUpRepository = mockk<CheckUpRepository>()
