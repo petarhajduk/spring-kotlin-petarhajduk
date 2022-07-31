@@ -1,4 +1,4 @@
-package com.infinumcourse.cars.controllers
+package com.infinumcourse.cars.controllers.dto
 
 import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.cars.entities.Car

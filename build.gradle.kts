@@ -28,6 +28,9 @@ dependencies {
     testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
 
+
+    implementation("org.springframework.boot:spring-boot-starter-hateoas")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-jdbc") //Adds db functionality
     implementation("org.springframework.boot:spring-boot-starter-web") //Adds web functionality
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -44,6 +47,9 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("com.ninja-squad:springmockk:3.1.1") //Used for using Mockk with Spring
+
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
 }
 
 tasks.test {

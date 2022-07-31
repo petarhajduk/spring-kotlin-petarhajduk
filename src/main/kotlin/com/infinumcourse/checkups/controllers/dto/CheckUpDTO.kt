@@ -1,4 +1,4 @@
-package com.infinumcourse.checkups.controllers
+package com.infinumcourse.checkups.controllers.dto
 
 import com.infinumcourse.checkups.entities.CarCheckUp
 import java.time.LocalDate

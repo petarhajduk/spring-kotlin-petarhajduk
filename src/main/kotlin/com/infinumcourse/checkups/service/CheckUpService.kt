@@ -1,8 +1,8 @@
 package com.infinumcourse.checkups.service
 
 import com.infinumcourse.cars.repository.CarRepository
-import com.infinumcourse.checkups.controllers.CheckUpAdder
-import com.infinumcourse.checkups.controllers.CheckUpDTO
+import com.infinumcourse.checkups.controllers.dto.CheckUpAdder
+import com.infinumcourse.checkups.entities.CarCheckUp
 import com.infinumcourse.checkups.repository.CheckUpRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -14,12 +14,12 @@ class CheckUpService(
     val carRepository: CarRepository,
     val checkUpRepository: CheckUpRepository
 ) {
-    fun addCheckUp(checkUpAdder: CheckUpAdder): CheckUpDTO{
+    fun addCheckUp(checkUpAdder: CheckUpAdder): CarCheckUp {
         val checkUp = checkUpAdder.toCheckUp { carId ->
             carRepository.findById(carId) ?: throw java.lang.IllegalArgumentException("no car with such id $carId")
         }
 
-        return CheckUpDTO(checkUpRepository.save(checkUp))
+        return checkUpRepository.save(checkUp)
     }
 
     fun getCheckUpsByManufacturer(): Map<String, Long> {
@@ -42,7 +42,7 @@ class CheckUpService(
         return map
     }
 
-    fun getAllCheckUpsPaged(pageable: Pageable, id: UUID): Page<CheckUpDTO> {
-        return checkUpRepository.findByCar_Id(id, pageable).map { CheckUpDTO(it) }
+    fun getAllCheckUpsPaged(id: UUID, pageable: Pageable): Page<CarCheckUp> {
+        return checkUpRepository.findByCar_Id(id, pageable)
     }
 }

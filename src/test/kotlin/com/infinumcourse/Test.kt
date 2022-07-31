@@ -3,7 +3,7 @@ package com.infinumcourse
 import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.APIInfo.repository.CarResponseRepository
 import com.infinumcourse.APIInfo.service.RestTemplateCarService
-import com.infinumcourse.cars.controllers.CarAdder
+import com.infinumcourse.cars.controllers.dto.CarAdder
 import com.infinumcourse.cars.entities.Car
 import com.infinumcourse.cars.repository.CarRepository
 import com.infinumcourse.cars.service.CarService

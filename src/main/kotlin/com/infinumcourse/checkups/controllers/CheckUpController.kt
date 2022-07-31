@@ -1,16 +1,22 @@
 package com.infinumcourse.checkups.controllers
 
+import com.infinumcourse.checkups.controllers.dto.CheckUpAdder
+import com.infinumcourse.checkups.controllers.dto.CheckUpResource
+import com.infinumcourse.checkups.controllers.dto.CheckUpResourceAssembler
+import com.infinumcourse.checkups.entities.CarCheckUp
 import com.infinumcourse.checkups.service.CheckUpService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpStatus
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.PagedModel
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@Controller
-class CheckUpController(private val checkUpService: CheckUpService) {
+@RestController
+class CheckUpController(
+    private val checkUpService: CheckUpService,
+    private val checkUpResourcesAssembler: CheckUpResourceAssembler
+    ) {
 
     @GetMapping("/get-check-ups-by-manufacturer")
     @ResponseBody
@@ -20,14 +26,26 @@ class CheckUpController(private val checkUpService: CheckUpService) {
 
     @PostMapping("/add-check-up")
     @ResponseBody
-    fun addCheckUp(@RequestBody carCheckUpAdder: CheckUpAdder): ResponseEntity<CheckUpDTO>{
-        val newCheckUp = checkUpService.addCheckUp(carCheckUpAdder)
-        return ResponseEntity(newCheckUp, HttpStatus.OK)
+    fun addCheckUp(@RequestBody carCheckUpAdder: CheckUpAdder): ResponseEntity<CheckUpResource>{
+        return ResponseEntity.ok(
+            checkUpResourcesAssembler.toModel(
+                checkUpService.addCheckUp(carCheckUpAdder)
+            )
+        )
     }
 
     @GetMapping("/get-all-checkups-paged")
     @ResponseBody
-    fun getAllCheckUpsPaged(pageable: Pageable, @RequestParam id: UUID): Page<CheckUpDTO> {
-        return checkUpService.getAllCheckUpsPaged(pageable, id)
+    fun getAllCheckUpsPaged(
+        @RequestParam id: UUID,
+        pageable: Pageable,
+        pagedResourcesAssembler: PagedResourcesAssembler<CarCheckUp>
+    ): ResponseEntity<PagedModel<CheckUpResource>> {
+        return ResponseEntity.ok(
+            pagedResourcesAssembler.toModel(
+                checkUpService.getAllCheckUpsPaged(id, pageable),
+                checkUpResourcesAssembler
+            )
+        )
     }
 }

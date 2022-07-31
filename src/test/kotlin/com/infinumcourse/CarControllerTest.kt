@@ -3,10 +3,10 @@ package com.infinumcourse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.APIInfo.repository.CarResponseRepository
-import com.infinumcourse.cars.controllers.CarAdder
+import com.infinumcourse.cars.controllers.dto.CarAdder
 import com.infinumcourse.cars.entities.Car
 import com.infinumcourse.cars.repository.CarRepository
-import com.infinumcourse.checkups.controllers.CheckUpAdder
+import com.infinumcourse.checkups.controllers.dto.CheckUpAdder
 import com.infinumcourse.checkups.entities.CarCheckUp
 import com.infinumcourse.checkups.repository.CheckUpRepository
 import org.junit.jupiter.api.BeforeEach

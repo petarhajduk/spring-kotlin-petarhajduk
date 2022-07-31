@@ -3,11 +3,10 @@ package com.infinumcourse.cars.service
 import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
 import com.infinumcourse.APIInfo.repository.CarResponseRepository
 import com.infinumcourse.APIInfo.service.RestTemplateCarService
-import com.infinumcourse.cars.controllers.CarAdder
+import com.infinumcourse.cars.controllers.dto.CarAdder
 import com.infinumcourse.cars.entities.Car
 import com.infinumcourse.cars.entities.CarInfo
 import com.infinumcourse.cars.repository.CarRepository
-import com.infinumcourse.checkups.controllers.CheckUpDTO
 import com.infinumcourse.checkups.repository.CheckUpRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -40,19 +39,14 @@ class CarService(
 
     fun getCarInfo(id: UUID): CarInfo {
         val car = carRepository.findById(id) ?: throw IllegalArgumentException("no car with such id")
-        val allCheckUps = checkUpRepository.findAll()
-        val onlyCheckUpsOfGivenCarId = mutableSetOf<CheckUpDTO>()
-
-        allCheckUps.forEach{
-            if(it.car.id == id) onlyCheckUpsOfGivenCarId.add(CheckUpDTO(it))
-        }
+        val onlyCheckUpsOfGivenCarId = checkUpRepository.findByCar_Id(id)
 
         var checkUpNeeded = true
         onlyCheckUpsOfGivenCarId.forEach{
             if (Period.between(it.checkUpDate, LocalDate.now()).years == 0) checkUpNeeded = false
         }
 
-        return CarInfo(car, onlyCheckUpsOfGivenCarId, checkUpNeeded)
+        return CarInfo(car, checkUpNeeded)
     }
 
     fun getAllCars(): List<Car> {
@@ -65,6 +59,10 @@ class CarService(
 
     fun getAllManufacturersAndModels(): Iterable<ManufacturerAndModel> {
         return carResponseRepository.findAll()
+    }
+
+    fun getCar(id: UUID): Car {
+        return carRepository.findById(id)
     }
 }
 

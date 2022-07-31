@@ -10,6 +10,6 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar
 @EnableScheduling
 class SchedulerConfiguration(private val rtCarService: RestTemplateCarService): SchedulingConfigurer {
     override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
-        taskRegistrar.addFixedDelayTask({rtCarService.getManufacturersAndModels()}, 2000)
+        taskRegistrar.addFixedDelayTask({rtCarService.getManufacturersAndModels()}, 3600000)
     }
 }

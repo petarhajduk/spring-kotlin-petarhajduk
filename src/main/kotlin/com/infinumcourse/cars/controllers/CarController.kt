@@ -1,49 +1,73 @@
 package com.infinumcourse.cars.controllers
 
-import com.infinumcourse.APIInfo.entities.ManufacturerAndModel
+import com.infinumcourse.cars.controllers.dto.*
 import com.infinumcourse.cars.entities.Car
-import com.infinumcourse.cars.entities.CarInfo
 import com.infinumcourse.cars.service.CarService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpStatus
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.PagedModel
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@Controller
-class CarController (private val carService: CarService) {
+@RestController
+class CarController (
+    private val carService: CarService,
+    private val carResourceAssembler: CarResourceAssembler,
+    private val carInfoResourceAssembler: CarInfoResourceAssembler
+    ) {
 
     @GetMapping("/get-all-cars")
     @ResponseBody
-    fun getAllcars(): List<Car> {
-        return carService.getAllCars()
+    fun getAllcars(): ResponseEntity<CollectionModel<CarResource>> {
+        return ResponseEntity.ok(
+            carResourceAssembler.toCollectionModel(carService.getAllCars())
+        )
     }
 
     @PostMapping("/add-car")
     @ResponseBody
-    fun addCar(@RequestBody carAdder: CarAdder): ResponseEntity<Car> {
-        val newCar = carService.addCar(carAdder)
-        return ResponseEntity(newCar, HttpStatus.OK)
+    fun addCar(@RequestBody carAdder: CarAdder): ResponseEntity<CarResource> {
+        return ResponseEntity.ok(
+            carResourceAssembler.toModel(
+                carService.addCar(carAdder)
+            )
+        )
     }
 
     @GetMapping("/get-car-info/{id}")
     @ResponseBody
-    fun getCarInfo(@PathVariable id: UUID): ResponseEntity<CarInfo> {
-        val newCarInfo = carService.getCarInfo(id)
-        return ResponseEntity(newCarInfo, HttpStatus.OK)
+    fun getCarInfo(
+        @PathVariable id: UUID,
+        pageable: Pageable,
+    ): ResponseEntity<CarInfoResource> {
+        return ResponseEntity.ok(
+            carInfoResourceAssembler.toModel(
+                carService.getCarInfo(id)
+            )
+        )
     }
 
     @GetMapping("/get-all-cars-paged")
     @ResponseBody
-    fun getAllCarsPaged(pageable: Pageable): Page<Car>{
-        return carService.getAllCarsPaged(pageable)
+    fun getAllCarsPaged(
+        pageable: Pageable,
+        pagedResourcesAssembler: PagedResourcesAssembler<Car>
+    ): ResponseEntity<PagedModel<CarResource>>{
+        return ResponseEntity.ok(
+            pagedResourcesAssembler.toModel(
+                carService.getAllCarsPaged(pageable),
+                carResourceAssembler
+            )
+        )
     }
 
-    @GetMapping("/get-all-manufacturers-and-models")
+    @GetMapping("/get-car/{id}")
     @ResponseBody
-    fun getAllManufacturersAndModels(): Iterable<ManufacturerAndModel> {
-        return carService.getAllManufacturersAndModels()
+    fun getCar(@PathVariable id: UUID): ResponseEntity<CarResource>{
+        return ResponseEntity.ok(
+            carResourceAssembler.toModel(carService.getCar(id))
+        )
     }
 }
