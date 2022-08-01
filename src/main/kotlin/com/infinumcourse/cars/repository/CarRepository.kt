@@ -10,7 +10,7 @@ interface CarRepository : Repository<Car, UUID>{
 
     fun save(car: Car): Car
 
-    fun saveAll(car: Iterable<Car>): Iterable<Car>
+    fun saveAll(car: Iterable<Car>): List<Car>
 
     fun findAll(): List<Car>
 

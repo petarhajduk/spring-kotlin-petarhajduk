@@ -23,38 +23,23 @@ class RestTemplateCarService(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     //@CacheEvict("apiFetch")
-    fun getManufacturersAndModels(){
+    fun getManufacturersAndModels(): CarResponse{
         logger.info("fetching from URL...")
 
-        val JSONObject: Array<ManufacturerAndModels> =
-            restTemplate.getForObject<CarResponse>("$baseUrl").cars
+        val carResponse = restTemplate.getForObject<CarResponse>("$baseUrl")
+
+        val JSONObject: List<ManufacturerAndModels> = carResponse.cars
 
         val models = mutableListOf<String>()
         JSONObject.forEach { models.addAll(it.models)} //combining all models in one list
 
-
-        if (!carResponseRepository.findAll().any()){
-            val dbInput = mutableListOf<ManufacturerAndModel>()
-
-            for (manu in JSONObject){ //basically creating a list with pairs (manufacturer, model) because that way I would be able to store them in the database
-                for (model in manu.models){
-                    dbInput.add(ManufacturerAndModel(manufacturer = manu.manufacturer, model = model))
-                }
-            }
-
-            carResponseRepository.saveAll(dbInput)
-            return
-        } else {
-            val numOfRows = carResponseRepository.count()
-            if (numOfRows == models.size.toLong()) return
-
-            for (o in JSONObject){
-                for (model in o.models){
-                    if (!carResponseRepository.existsByManufacturerAndModel(o.manufacturer, model)){
-                        carResponseRepository.save(ManufacturerAndModel(manufacturer = o.manufacturer, model = model))
-                    }
+        for (o in JSONObject){
+            for (model in o.models){
+                if (!carResponseRepository.existsByManufacturerAndModel(o.manufacturer, model)){
+                    carResponseRepository.save(ManufacturerAndModel(manufacturer = o.manufacturer, model = model))
                 }
             }
         }
+        return carResponse
     }
 }

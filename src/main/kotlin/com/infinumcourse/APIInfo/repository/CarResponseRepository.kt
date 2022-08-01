@@ -5,17 +5,17 @@ import org.springframework.data.repository.Repository
 import java.util.*
 
 interface CarResponseRepository: Repository<ManufacturerAndModel, UUID> {
-    fun saveAll(manufacturerAndModel: Iterable<ManufacturerAndModel>): Iterable<ManufacturerAndModel>
+    fun saveAll(manufacturerAndModel: Iterable<ManufacturerAndModel>): List<ManufacturerAndModel>
 
     fun save(manufacturerAndModel: ManufacturerAndModel) : ManufacturerAndModel
 
-    fun findAll(): Iterable<ManufacturerAndModel>
+    fun findAll(): List<ManufacturerAndModel>
 
     fun deleteAll()
 
     fun count(): Long
 
-    fun findManufacturerAndModelDTOByManufacturer(manufacturer: String): Iterable<ManufacturerAndModel>
+    fun findManufacturerAndModelDTOByManufacturer(manufacturer: String): List<ManufacturerAndModel>
 
     fun findByManufacturerAndModel(manufacturer: String, model: String): ManufacturerAndModel
 

@@ -20,7 +20,7 @@ class CheckUpController(
 
     @GetMapping("/get-check-ups-by-manufacturer")
     @ResponseBody
-    fun getCheckUpsByManufacturer(): Map<String, Long> {
+    fun getCheckUpsByManufacturer(): List<String> {
         return checkUpService.getCheckUpsByManufacturer()
     }
 

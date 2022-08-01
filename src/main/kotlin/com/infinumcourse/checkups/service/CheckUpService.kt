@@ -22,24 +22,9 @@ class CheckUpService(
         return checkUpRepository.save(checkUp)
     }
 
-    fun getCheckUpsByManufacturer(): Map<String, Long> {
-        val map = mutableMapOf<String, Long>()
-        val cars = carRepository.findAll()
-
-        cars.forEach{//Iterating through every car in the database to add every manufacturer in the map
-            if (!map.containsKey(it.manufacturerAndModel.manufacturer)) map.put(it.manufacturerAndModel.manufacturer, 0)
-        }
-
-        var manufacturer: String?
-        var temp: Long
-
-        val checkups = checkUpRepository.findAll()
-        checkups.forEach{//after each iteration I will increment the value in the map depending on who's car's check up am I currently at
-            temp = map[it.car.manufacturerAndModel.manufacturer] ?: throw RuntimeException("The map broke")
-            map[it.car.manufacturerAndModel.manufacturer] = temp+1
-        }
-
-        return map
+    //@Query(value = "select manufacturer, count(checkups.id) from checkups natural join cars natural join manufacturerandmodels")
+    fun getCheckUpsByManufacturer(): List<String> {
+        return checkUpRepository.findCountCheckUpsByManufacturer()
     }
 
     fun getAllCheckUpsPaged(id: UUID, pageable: Pageable): Page<CarCheckUp> {

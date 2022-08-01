@@ -57,7 +57,7 @@ class CarService(
         return carRepository.findAll(pageable)
     }
 
-    fun getAllManufacturersAndModels(): Iterable<ManufacturerAndModel> {
+    fun getAllManufacturersAndModels(): List<ManufacturerAndModel> {
         return carResponseRepository.findAll()
     }
 

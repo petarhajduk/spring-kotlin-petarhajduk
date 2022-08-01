@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 //    "Car":"1"
 //}
 
-class CarResponse(
-    @JsonProperty("cars") val cars: Array<ManufacturerAndModels>
+data class CarResponse(
+    @JsonProperty("cars") val cars: List<ManufacturerAndModels>
 )
 
-class ManufacturerAndModels(
+data class ManufacturerAndModels(
     val manufacturer: String,
-    val models: Array<String>
+    val models: List<String>
 )

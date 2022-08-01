@@ -87,7 +87,7 @@ class CarControllerTest @Autowired constructor(
     fun addCarCheckUpTest(){
         mockMvc.post("/add-check-up") {
             val id = carRepository.findByProductionYear(2008).first().id
-            content = CheckUpAdder(id, LocalDate.now().minusMonths(1), "Marko", 1000)
+            content = objectMapper.writeValueAsString(CheckUpAdder(id, LocalDate.now().minusMonths(1), "Marko", 1000))
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
