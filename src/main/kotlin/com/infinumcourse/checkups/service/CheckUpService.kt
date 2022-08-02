@@ -27,7 +27,13 @@ class CheckUpService(
         return checkUpRepository.findCountCheckUpsByManufacturer()
     }
 
-    fun getAllCheckUpsPaged(id: UUID, pageable: Pageable): Page<CarCheckUp> {
-        return checkUpRepository.findByCar_Id(id, pageable)
+    fun getAllCheckUpsPaged(id: UUID, pageable: Pageable, order: String?): Page<CarCheckUp> {
+        if (order == "ASC") return checkUpRepository.findByCar_IdOrderByCheckUpDate(id, pageable)
+        else if (order == "DESC") return checkUpRepository.findByCar_IdOrderByCheckUpDateDesc(id, pageable)
+        else throw IllegalArgumentException("Order should be either ASC or DESC")
+    }
+
+    fun deleteCheckUp(id: UUID) {
+        checkUpRepository.deleteById(id)
     }
 }

@@ -38,14 +38,21 @@ class CheckUpController(
     @ResponseBody
     fun getAllCheckUpsPaged(
         @RequestParam id: UUID,
+        @RequestParam order: String?,
         pageable: Pageable,
         pagedResourcesAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CheckUpResource>> {
         return ResponseEntity.ok(
             pagedResourcesAssembler.toModel(
-                checkUpService.getAllCheckUpsPaged(id, pageable),
+                checkUpService.getAllCheckUpsPaged(id, pageable, order),
                 checkUpResourcesAssembler
             )
         )
+    }
+
+    @DeleteMapping("/delete-check-up")
+    @ResponseBody
+    fun deleteCar(@RequestParam id: UUID){
+        checkUpService.deleteCheckUp(id)
     }
 }

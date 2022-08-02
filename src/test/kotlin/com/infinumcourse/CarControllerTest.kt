@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
@@ -65,6 +66,7 @@ class CarControllerTest @Autowired constructor(
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_admin"])
     fun testGetAllCars(){
         //val expectedCars = cars
         mockMvc.get("/get-all-cars")
@@ -74,6 +76,7 @@ class CarControllerTest @Autowired constructor(
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_admin", "SCOPE_user"])
     fun addCarTest(){
         mockMvc.post("/add-car") {
             content = objectMapper.writeValueAsString(CarAdder(ManufacturerAndModel(manufacturer = "Porsche", model = "Panamera"), "HD9872NDCOD823NF", LocalDate.now() , 2012))
@@ -84,6 +87,7 @@ class CarControllerTest @Autowired constructor(
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_admin"])
     fun addCarCheckUpTest(){
         mockMvc.post("/add-check-up") {
             val id = carRepository.findByProductionYear(2008).first().id
@@ -106,7 +110,9 @@ class CarControllerTest @Autowired constructor(
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_admin", "SCOPE_user"])
     fun getAllCheckUpsPaged(){
-        mockMvc.get("/get-all-checkups-paged?id=bb2f22ca-fa81-4d35-a7cb-a5ebd0ec928c").andExpect { status { is2xxSuccessful() } }
+        val car = carRepository.findAll().first()
+        mockMvc.get("/get-all-checkups-paged?id=${car.id}&order=DESC").andExpect { status { is2xxSuccessful() } }
     }
 }

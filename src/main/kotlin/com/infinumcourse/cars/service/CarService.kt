@@ -64,5 +64,9 @@ class CarService(
     fun getCar(id: UUID): Car {
         return carRepository.findById(id)
     }
+
+    fun deleteCar(id: UUID) {
+        carRepository.deleteById(id)
+    }
 }
 

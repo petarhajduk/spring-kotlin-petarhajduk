@@ -21,7 +21,9 @@ interface CheckUpRepository: Repository<CarCheckUp, UUID> {
 
     fun deleteAll()
 
-    fun findByCar_Id(id: UUID, pageable: Pageable): Page<CarCheckUp>
+    fun findByCar_IdOrderByCheckUpDate(id: UUID, pageable: Pageable): Page<CarCheckUp>
+
+    fun findByCar_IdOrderByCheckUpDateDesc(id: UUID, pageable: Pageable): Page<CarCheckUp>
 
     fun findByCar_Id(id: UUID): List<CarCheckUp>
 
@@ -29,4 +31,6 @@ interface CheckUpRepository: Repository<CarCheckUp, UUID> {
 
     @Query(value = "select manufacturer, count(checkups.id) from checkups join cars on checkups.car = cars.id join manufacturerandmodels on cars.manufacturerandmodel = manufacturerandmodels.id group by manufacturer", nativeQuery = true)
     fun findCountCheckUpsByManufacturer(): List<String>
+
+    fun deleteById(id: UUID)
 }

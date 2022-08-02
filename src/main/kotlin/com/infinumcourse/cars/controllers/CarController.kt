@@ -70,4 +70,10 @@ class CarController (
             carResourceAssembler.toModel(carService.getCar(id))
         )
     }
+
+    @DeleteMapping("/delete-car")
+    @ResponseBody
+    fun deleteCar(@RequestParam id: UUID){
+        carService.deleteCar(id)
+    }
 }

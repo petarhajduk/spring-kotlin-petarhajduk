@@ -20,6 +20,9 @@ interface CarRepository : Repository<Car, UUID>{
 
     fun deleteAll()
 
+    fun findByVin(vin: String): Car
+
     fun findByProductionYear(year: Long): List<Car>
 
+    fun deleteById(id: UUID)
 }

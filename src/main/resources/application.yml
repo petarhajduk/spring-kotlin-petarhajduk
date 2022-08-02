@@ -1,0 +1,21 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+
+carcheckup-service:
+  base-url: "https://62d922dd5d893b27b2df0731.mockapi.io/api/v1/cars/1"
+
+spring:
+  jpa:
+    open-in-view: false
+  datasource:
+    url: "jdbc:postgresql://localhost:5434/carCheckUp"
+    username: "admin"
+    password: "12345678"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "https://infinum.com"
+          jwk-set-uri: "http://localhost:8888/jwks.json"

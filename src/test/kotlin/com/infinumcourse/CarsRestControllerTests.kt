@@ -63,11 +63,11 @@ class CarsRestControllerTests @Autowired constructor(
 
         val carResponce = rtCarService.getManufacturersAndModels()
 
-        Assertions.assertThat(carResponce).isEqualTo(CarResponse((arrayOf<ManufacturerAndModels>(
-            ManufacturerAndModels("Porsche", arrayOf("911 Turbo", "Cayenne", "Panamera")),
-            ManufacturerAndModels("Citroen", arrayOf("C3", "C4", "C5")),
-            ManufacturerAndModels("Volkswagen", arrayOf("Polo")),
-            ManufacturerAndModels("Hyundai", arrayOf("i30","i20","i35","i10"))
+        Assertions.assertThat(carResponce).isEqualTo(CarResponse((listOf<ManufacturerAndModels>(
+            ManufacturerAndModels("Porsche", listOf("911 Turbo", "Cayenne", "Panamera")),
+            ManufacturerAndModels("Citroen", listOf("C3", "C4", "C5")),
+            ManufacturerAndModels("Volkswagen", listOf("Polo")),
+            ManufacturerAndModels("Hyundai", listOf("i30","i20","i35","i10"))
         ))))
     }
 }
