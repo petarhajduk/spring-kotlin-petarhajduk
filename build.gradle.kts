@@ -6,11 +6,13 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE" //Handles Spring Boot dependencies
     kotlin("jvm") version "1.7.0"
     kotlin("plugin.spring") version "1.7.0"
+    kotlin("plugin.jpa") version "1.7.10"
     application
 }
 
 group = "me.petar"
 version = "1.0-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -24,14 +26,38 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.assertj:assertj-core:3.23.1")
     testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
 
+
+    implementation("org.springframework.boot:spring-boot-starter-jdbc") //Adds db functionality
+    implementation("org.springframework.boot:spring-boot-starter-hateoas")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web") //Adds web functionality
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+    implementation("io.projectreactor.netty:reactor-netty")
+
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.flywaydb:flyway-core")
+    runtimeOnly("org.postgresql:postgresql")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") //Adds Spring Boot test
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
     testImplementation("com.ninja-squad:springmockk:3.1.1") //Used for using Mockk with Spring
+    testImplementation("org.springframework.security:spring-security-test")
+
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
 }
 
 tasks.test {
@@ -39,7 +65,10 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "15"
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
+    }
 }
 
 application {
@@ -48,4 +77,10 @@ application {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.testcontainers:testcontainers-bom:1.17.3")
+    }
 }
